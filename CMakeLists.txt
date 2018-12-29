@@ -45,12 +45,25 @@ check_cxx_symbol_exists(getcwd      unistd.h GETCWD_FOUND)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
-add_executable(impromptu src/impromptu.cpp)
-target_link_libraries(impromptu stdc++fs ${LIBGIT2_LIBRARIES})
+add_library(impromptu STATIC
+    src/impromptu/external_info.cpp
+    src/impromptu/git.cpp
+    src/impromptu/host.cpp
+    src/impromptu/shell.cpp
+    src/impromptu/subprocess.cpp
+    src/impromptu/terminal.cpp
+    src/impromptu/time.cpp
+    src/impromptu/user.cpp
+    src/impromptu/vcs.cpp
+)
+target_link_libraries(impromptu stdc++fs)
+
+add_executable(fkoehler src/fkoehler.cpp)
+target_link_libraries(fkoehler ${LIBGIT2_LIBRARIES} impromptu)
 
 add_executable(bench src/bench.cpp)
-target_link_libraries(bench stdc++fs benchmark benchmark_main pthread)
+target_link_libraries(bench benchmark benchmark_main pthread impromptu)
 
 configure_file(${CMAKE_SOURCE_DIR}/tools/run_bench ${CMAKE_BINARY_DIR}/run_bench COPYONLY)
 
-install(TARGETS impromptu RUNTIME DESTINATION bin)
+# install(TARGETS fkoehler RUNTIME DESTINATION bin)
