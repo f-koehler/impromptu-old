@@ -1,0 +1,6 @@
+#!/bin/bash
+set -euf -o pipefail
+
+sudo cpupower frequency-set --governor performance
+./bench "$@"
+sudo cpupower frequency-set --governor powersave
