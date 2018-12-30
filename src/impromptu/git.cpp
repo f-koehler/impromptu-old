@@ -1,7 +1,7 @@
 #include "impromptu/git.hpp"
 
 namespace impromptu {
-std::string GitRepository::_get_action() {
+std::string GitRepository::_fetch_action() {
     // rebase actions
     static const std::string dirs1[] = {"rebase-apply", "rebase"};
     for (const auto &tmp : dirs1) {
@@ -41,12 +41,12 @@ std::string GitRepository::_get_action() {
     return std::string();
 }
 
-std::string GitRepository::_get_hash() {
+std::string GitRepository::_fetch_hash() {
     return check_output("git rev-parse --quiet --verify HEAD -C " +
                         _path.native());
 }
 
-std::string GitRepository::_get_branch() {
+std::string GitRepository::_fetch_branch() {
     std::filesystem::path path(
         check_output("git -C " + _path.native() + " symbolic-ref HEAD"));
     std::filesystem::path branch;
@@ -57,6 +57,12 @@ std::string GitRepository::_get_branch() {
 }
 
 GitRepository::GitRepository(const std::filesystem::path &path)
-    : _path(path), _git_dir(path / ".git"), _action(_get_action()),
-      _hash(_get_hash()), _branch(_get_branch()) {}
+    : _path(path), _git_dir(path / ".git"),
+      _action(std::bind(&GitRepository::_fetch_action, this)),
+      _hash(std::bind(&GitRepository::_fetch_hash, this)),
+      _branch(std::bind(&GitRepository::_fetch_branch, this)) {}
+
+std::string GitRepository::get_action() { return _action.get(); }
+std::string GitRepository::get_hash() { return _hash.get(); }
+std::string GitRepository::get_branch() { return _branch.get(); }
 } // namespace impromptu

@@ -1,6 +1,7 @@
 #ifndef IMPROMPTU_GIT_HPP
 #define IMPROMPTU_GIT_HPP
 
+#include "on_demand.hpp"
 #include "subprocess.hpp"
 
 #include <string>
@@ -13,17 +14,20 @@ class GitRepository {
     const std::filesystem::path _path;
     const std::filesystem::path _git_dir;
 
-    std::string _action;
-    std::string _hash;
-    std::string _branch;
+    OnDemandValue<std::string> _action;
+    OnDemandValue<std::string> _hash;
+    OnDemandValue<std::string> _branch;
 
-  public:
-    std::string _get_action();
-    std::string _get_hash();
-    std::string _get_branch();
+    std::string _fetch_action();
+    std::string _fetch_hash();
+    std::string _fetch_branch(); 
 
   public:
     GitRepository(const std::filesystem::path &path);
+
+    std::string get_action();
+    std::string get_hash();
+    std::string get_branch();
 };
 } // namespace impromptu
 
