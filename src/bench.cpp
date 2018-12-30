@@ -32,22 +32,6 @@ static void BM_GitRepository(benchmark::State &state) {
 }
 BENCHMARK(BM_GitRepository);
 
-static void BM_GitRepository_get_action(benchmark::State &state) {
-    for (auto _ : state) {
-        auto repo = GitRepository("/home/fkoehler/.emacs.d/");
-        repo.get_action();
-    }
-}
-BENCHMARK(BM_GitRepository_get_action);
-
-static void BM_GitRepository_get_hash(benchmark::State &state) {
-    for (auto _ : state) {
-        auto repo = GitRepository("/home/fkoehler/.emacs.d/");
-        repo.get_hash();
-    }
-}
-BENCHMARK(BM_GitRepository_get_hash);
-
 static void BM_get_cwd(benchmark::State &state) {
     for (auto _ : state) {
         benchmark::DoNotOptimize(get_cwd());

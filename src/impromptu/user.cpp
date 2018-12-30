@@ -13,4 +13,4 @@ std::string get_username() {
     }
     return std::string(pw->pw_name);
 }
-}
+} // namespace impromptu

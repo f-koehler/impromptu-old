@@ -19,4 +19,4 @@ std::tuple<VCS, std::filesystem::path> detect_vcs(std::filesystem::path path) {
         path = path.parent_path();
     }
 }
-}
+} // namespace impromptu
